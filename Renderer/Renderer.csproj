@@ -57,8 +57,16 @@
     </Compile>
     <Compile Include="int3.cs" />
     <Compile Include="MathMisc.cs" />
+    <Compile Include="Mesh.cs" />
+    <Compile Include="Meshes\Cone.cs" />
+    <Compile Include="Meshes\Cube.cs" />
+    <Compile Include="Meshes\Cylinder.cs" />
+    <Compile Include="Meshes\SimpleTriangle.cs" />
+    <Compile Include="Meshes\Sphere.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rasterizer.cs" />
+    <Compile Include="Vertex.cs" />
     <Compile Include="VertexProcessor.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
