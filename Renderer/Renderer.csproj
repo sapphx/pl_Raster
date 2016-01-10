@@ -46,16 +46,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="float3.cs" />
-    <Compile Include="float4.cs" />
-    <Compile Include="float4x4.cs" />
+    <Compile Include="Bases\float3.cs" />
+    <Compile Include="Bases\float4.cs" />
+    <Compile Include="Bases\float4x4.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="int3.cs" />
+    <Compile Include="Bases\int3.cs" />
+    <Compile Include="Fragment.cs" />
+    <Compile Include="Light.cs" />
+    <Compile Include="Lights\DirectionalLight.cs" />
+    <Compile Include="Lights\PointLight.cs" />
     <Compile Include="MathMisc.cs" />
     <Compile Include="Mesh.cs" />
     <Compile Include="Meshes\Cone.cs" />
