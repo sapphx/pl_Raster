@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Renderer
+namespace Renderer8
 {
 	class float4
 	{
@@ -21,6 +21,11 @@ namespace Renderer
 		public  float4 ( float x, float y, float z, float w )
 		{
 			vals = new float[4] { x, y, z, w };
+		}
+
+		public float4 ( float3 f )
+		{
+			vals = new float[4] { f.X, f.Y, f.Z, 1 };
 		}
 
 		#endregion
@@ -137,6 +142,11 @@ namespace Renderer
 		public float4 Lerp ( float4 v, float t )
 		{
 			return new float4(vals[0] + t * (v.X - vals[0]), vals[1] + t * (v.Y - vals[1]), vals[2] + t * (v.Z - vals[2]), vals[3] + t * (v.W - vals[3]));
+		}
+
+		public byte4 ToByte4 ()
+		{
+			return new byte4(this);
 		}
 
 		#endregion

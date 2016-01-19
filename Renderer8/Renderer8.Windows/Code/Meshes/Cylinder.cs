@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Renderer.Meshes
+namespace Renderer8
 {
 	class Cylinder
 	{

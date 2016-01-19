@@ -1,4 +1,4 @@
-﻿namespace Renderer
+﻿namespace Renderer8
 {
 	class Fragment : Vertex
 	{

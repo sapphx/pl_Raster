@@ -107,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\Bases\byte4.cs" />
+    <Compile Include="Code\Bases\float2.cs" />
     <Compile Include="Code\Bases\float3.cs" />
     <Compile Include="Code\Bases\float4.cs" />
     <Compile Include="Code\Bases\float4x4.cs" />

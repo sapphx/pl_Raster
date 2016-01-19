@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Renderer
+namespace Renderer8
 {
 	class byte4
 	{
@@ -29,6 +29,14 @@ namespace Renderer
 			g = (byte) colour.G;
 			b = (byte) colour.B;
 			a = 1;
+		}
+
+		public byte4 ( float4 colour )
+		{
+			r = (byte)colour.R;
+			g = (byte)colour.G;
+			b = (byte)colour.B;
+			a = (byte)colour.A;
 		}
 
 	}

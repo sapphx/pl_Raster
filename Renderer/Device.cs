@@ -39,19 +39,18 @@ namespace Renderer
 			}
 		}
 
-		public void Present()
-		{
-			bmp.d	
+		//public void Present()
+		//{
+		//
+		//	using (var stream = bmp.PixelBuffer.AsStream())
+		//	{
+		//		// writing our byte[] back buffer into our WriteableBitmap stream
+		//		stream.Write(backBuffer, 0, backBuffer.Length);
+		//	}
+		//	// request a redraw of the entire bitmap
+		//	bmp.Invalidate();
+		//}
 
-			using (var stream = bmp.PixelBuffer.AsStream())
-			{
-				// writing our byte[] back buffer into our WriteableBitmap stream
-				stream.Write(backBuffer, 0, backBuffer.Length);
-			}
-			// request a redraw of the entire bitmap
-			bmp.Invalidate();
-		}
-
-# endregions
+		#endregion
 	}
 }

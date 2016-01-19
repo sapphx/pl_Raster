@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Renderer
+namespace Renderer8
 {
 	class float3
 	{
@@ -191,6 +191,11 @@ namespace Renderer
 		public	byte4	ToByte4()
 		{
 			return	new	byte4(this);
+		}
+
+		public	float4	ToFloat4()
+		{
+			return	new float4(this);
 		}
 
 		#endregion
