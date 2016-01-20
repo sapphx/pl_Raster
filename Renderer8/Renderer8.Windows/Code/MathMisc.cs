@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,9 +25,21 @@ namespace Renderer8
 
 		#region Functions
 
-		public static float Saturate(float f)
+			public static float Saturate(float f)
 			{
 				return (f < 0) ? 0 : ((f > 1) ? 1 : f);
+			}
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static float Clamp ( float value, float min = 0, float max = 1 )
+			{
+				return Math.Max(min, Math.Min(value, max));
+			}
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static float Interpolate ( float min, float max, float gradient )
+			{
+				return min + (max - min) * Clamp(gradient);
 			}
 
 		#endregion

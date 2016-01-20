@@ -23,7 +23,23 @@ namespace Renderer8
 			r = g = b = a = value4all;
 		}
 
-		public byte4(float3 colour)
+		public byte4 ( byte x, byte y, byte z, byte w )
+		{
+			r = x;
+			g = y;
+			b = z;
+			a = w;
+		}
+
+		public byte4 ( int x, int y, int z, int w )
+		{
+			r = (byte) x;
+			g = (byte) y;
+			b = (byte) z;
+			a = (byte) w;
+		}
+
+		public byte4 (float3 colour)
 		{
 			r = (byte) colour.R;
 			g = (byte) colour.G;
@@ -37,6 +53,16 @@ namespace Renderer8
 			g = (byte)colour.G;
 			b = (byte)colour.B;
 			a = (byte)colour.A;
+		}
+
+		public static byte4 operator * ( byte4 a, byte4 b )
+		{
+			return new byte4(a.r * b.r, a.g * b.g, a.b * b.b, a.a * b.a);
+		}
+
+		public static byte4 operator * ( byte4 a, byte b )
+		{
+			return new byte4(a.r * b, a.g * b, a.b * b, a.a * b);
 		}
 
 	}

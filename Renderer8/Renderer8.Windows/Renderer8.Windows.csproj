@@ -111,6 +111,7 @@
     <Compile Include="Code\Bases\float3.cs" />
     <Compile Include="Code\Bases\float4.cs" />
     <Compile Include="Code\Bases\float4x4.cs" />
+    <Compile Include="Code\Bases\int2.cs" />
     <Compile Include="Code\Bases\int3.cs" />
     <Compile Include="Code\Camera.cs" />
     <Compile Include="Code\Device.cs" />
