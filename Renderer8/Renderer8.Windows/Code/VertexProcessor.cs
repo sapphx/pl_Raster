@@ -79,6 +79,20 @@ namespace Renderer8
 			float i1mC = 1.0f - c;
 			float3 v = new float3(v4.X, v4.Y, v4.Z);
 			v.Normalize();
+			float4x4 m = new float4x4(	new float4(v.X * v.X * i1mC + c, v.Y * v.X * i1mC + v.Z * s, v.X * v.Z * i1mC - v.Y * s, 0),
+										new float4(v.X * v.Y * i1mC - v.Z * s, v.Y * v.Y * i1mC + c, v.Y * v.Z * i1mC + v.X * s, 0),
+										new float4(v.X * v.Z * i1mC + v.Y * s, v.Y * v.Z * i1mC - v.X * s, v.Z * v.Z * i1mC + c, 0),
+										new float4(0, 0, 0, 1));
+			obj2world = m * obj2world;
+		}
+
+		public void MultByRotForSpecificUsage ( float4 v4 )
+		{
+			float s = (float)Math.Sin(v4.W * MathMisc.f2PId180);
+			float c = (float)Math.Cos(v4.W * MathMisc.f2PId180);
+			float i1mC = 1.0f - c;
+			float3 v = new float3(v4.X, v4.Y, v4.Z);
+			v.Normalize();
 			float4x4 m = new float4x4(new float4(v.X * v.X * i1mC + c, v.Y * v.X * i1mC + v.Z * s, v.X * v.Z * i1mC - v.Y * s, 0),
 										new float4(v.X * v.Y * i1mC - v.Z * s, v.Y * v.Y * i1mC + c, v.Y * v.Z * i1mC + v.X * s, 0),
 										new float4(v.X * v.Z * i1mC + v.Y * s, v.Y * v.Z * i1mC - v.X * s, v.Z * v.Z * i1mC + c, 0),
@@ -111,7 +125,7 @@ namespace Renderer8
             return new float3( c.X * c.W, c.Y * c.W, c.Z * c.W);
         }
 
-	#endregion
+		#endregion
 
-}
+	}
 }

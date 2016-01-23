@@ -118,29 +118,40 @@ namespace Renderer8
 			}
 		}
 
-	//	public void DrawBline ( float2 point0, float2 point1, float4 color )
-	//	{
-	//		int x0 = (int)point0.X;
-	//		int y0 = (int)point0.Y;
-	//		int x1 = (int)point1.X;
-	//		int y1 = (int)point1.Y;
-	//
-	//		var dx = Math.Abs(x1 - x0);
-	//		var dy = Math.Abs(y1 - y0);
-	//		var sx = (x0 < x1) ? 1 : -1;
-	//		var sy = (y0 < y1) ? 1 : -1;
-	//		var err = dx - dy;
-	//
-	//		while (true)
-	//		{
-	//			DrawPoint(new float2(x0, y0), color);
-	//
-	//			if ((x0 == x1) && (y0 == y1)) break;
-	//			var e2 = 2 * err;
-	//			if (e2 > -dy) { err -= dy; x0 += sx; }
-	//			if (e2 < dx) { err += dx; y0 += sy; }
-	//		}
-	//	}
+		public void DrawPoint ( int pX, int pY, float z, byte4 color )
+		{
+			// Clipping what's visible on screen
+			if (pX >= 0 && pY >= 0 && pX < pixelWidth && pY < pixelHeight)
+			{
+
+				PutPixel(pX, pY, z, color);//.ToByte4());//new float4(1.0f, 1.0f, 0.0f, 1.0f).ToByte4());
+															 //new byte4((byte) (z * 120), 0, 0, 1));//
+			}
+		}
+
+		//	public void DrawBline ( float2 point0, float2 point1, float4 color )
+		//	{
+		//		int x0 = (int)point0.X;
+		//		int y0 = (int)point0.Y;
+		//		int x1 = (int)point1.X;
+		//		int y1 = (int)point1.Y;
+		//
+		//		var dx = Math.Abs(x1 - x0);
+		//		var dy = Math.Abs(y1 - y0);
+		//		var sx = (x0 < x1) ? 1 : -1;
+		//		var sy = (y0 < y1) ? 1 : -1;
+		//		var err = dx - dy;
+		//
+		//		while (true)
+		//		{
+		//			DrawPoint(new float2(x0, y0), color);
+		//
+		//			if ((x0 == x1) && (y0 == y1)) break;
+		//			var e2 = 2 * err;
+		//			if (e2 > -dy) { err -= dy; x0 += sx; }
+		//			if (e2 < dx) { err += dx; y0 += sy; }
+		//		}
+		//	}
 
 		void ProcessScanLine ( int y, float3 pa, float3 pb, float3 pc, float3 pd, byte4 color )
 		{
@@ -155,8 +166,9 @@ namespace Renderer8
 
 			// drawing a line from left (sx) to right (ex) 
 			for (int x = sx; x < ex; x++)
-			{ 
-				DrawPoint(new int2(x, y), MathMisc.Interpolate(z1, z2, (x - sx) / (float)(ex - sx)), color);
+			{
+				//DrawPoint(new int2(x, y), MathMisc.Interpolate(z1, z2, (x - sx) / (float)(ex - sx)), color);
+				DrawPoint(x, y, MathMisc.Interpolate(z1, z2, (x - sx) / (float)(ex - sx)), color);
 			}
 		}
 
@@ -256,29 +268,30 @@ namespace Renderer8
 				//foreach (Vertex vertex in mesh.vertices)
 				//{
 				//	// First, we project the 3D coordinates into the 2D space
-				//	float2 point = Project(vertex.Position, transformMatrix);
+				//	float3 point = Project(vertex.Position, transformMatrix);
 				//	// Then we can draw on screen
-				//	DrawPoint(point);
+				//	DrawPoint(point, new float4(1.0f, 1.0f, 0.0f, 1.0f));
 				//}
 
 				//foreach (int3 face in mesh.indices)
 				//{
-				//	float2 pixelA = Project(mesh.vertices[face.A].Position, transformMatrix);
-				//	float2 pixelB = Project(mesh.vertices[face.B].Position, transformMatrix);
-				//	float2 pixelC = Project(mesh.vertices[face.C].Position, transformMatrix);
+				//	float3 pixelA = Project(mesh.vertices[face.A].Position, transformMatrix);
+				//	float3 pixelB = Project(mesh.vertices[face.B].Position, transformMatrix);
+				//	float3 pixelC = Project(mesh.vertices[face.C].Position, transformMatrix);
 				//
 				//	DrawBline(pixelA, pixelB);
 				//	DrawBline(pixelB, pixelC);
 				//	DrawBline(pixelC, pixelA);
 				//}
 
+
 				foreach (int3 face in mesh.indices)
 				{
 					float3 pixelA = Project(mesh.vertices[face.A].Position, transformMatrix);
 					float3 pixelB = Project(mesh.vertices[face.B].Position, transformMatrix);
 					float3 pixelC = Project(mesh.vertices[face.C].Position, transformMatrix);
-
-					DrawTriangle(pixelA, pixelB, pixelC, new byte4(iterator%2, 0,0,1));
+				
+					DrawTriangle(pixelA, pixelB, pixelC, (new byte4(iterator%2, 0,0,1)) * 255);
 					iterator++;
 				}
 			}
