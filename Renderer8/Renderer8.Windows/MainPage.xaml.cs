@@ -24,7 +24,7 @@ namespace Renderer8
     public sealed partial class MainPage : Page
     {
 		Device device;
-		Mesh mesh = new Cylinder();//new Cone();//new Cube(new float3(), new float4(0,1,0,0));
+		Mesh mesh = new Cylinder();   //new Cone();//new Cube(new float3(), new float4(0,1,0,0));
 		Camera camera = new Camera();
 
 		public MainPage()

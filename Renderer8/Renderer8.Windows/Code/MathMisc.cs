@@ -27,7 +27,7 @@ namespace Renderer8
 
 		#region Functions
 
-		public static float Saturate(float f)
+			public static float Saturate(float f)
 			{
 				return (f < 0) ? 0 : ((f > 1) ? 1 : f);
 			}

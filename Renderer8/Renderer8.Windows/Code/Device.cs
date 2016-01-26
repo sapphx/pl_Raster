@@ -254,16 +254,9 @@ namespace Renderer8
 			{
 				iterator = 0;
 				vp.SetIdentity();
-				//vp.MultByRot(1, new float3(0, 1, 0));
 				vp.MultByRot(mesh.rotation);
-				//
-
-				//var worldMatrix = Matrix.RotationYawPitchRoll(mesh.Rotation.Y,
-				//											  mesh.Rotation.X, mesh.Rotation.Z) *
-				//				  Matrix.Translation(mesh.Position);
 
 				float4x4 transformMatrix = vp.obj2world * vp.world2view * vp.view2proj;
-				// worldMatrix * viewMatrix * projectionMatrix;
 
 				//foreach (Vertex vertex in mesh.vertices)
 				//{

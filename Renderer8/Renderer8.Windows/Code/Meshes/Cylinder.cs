@@ -97,41 +97,7 @@ namespace Renderer8
 					}
 				}
 
-				//if (i == 0)
-				//{
-				//	//bot and first
-				//	indices[i] = new int3(0, 0, 0);
-				//}
-				//else if (i == 1 + 2 * segments)
-				//{
-				//	//top and last
-				//}
-				//else
-				//{
-				//	//every mid
-				//}
-
-				//if (i < slices)
-				//{
-				//	//bottom
-				//	indices[i] = new int3(0, (i)%slices + 1, (i + 1)%slices + 1);
-				//}
-				//else
-				//{
-				//	if (i >= tSize - slices)
-				//	{
-				//		//top
-				//		//indices[i] = new int3(0, 0, 0);
-				//		indices[i] = new int3(vSize - 1, ((i) % slices + 1) + , ((i + 1) % slices + 1));
-				//		//indices[i] = new int3(vSize - 1, (i + 1) % slices + (i - 1)/segments, (i + 2) % slices + (i - 1) / segments);
-				//	}
-				//	else
-				//	{
-				//		//middle
-				//		indices[i] = new int3(0, 0, 0);
-				//	}
-				//	//indices[i] = new int3(vSize - 1, i - slices + 1, i - slices + 2);
-				//}
+				
 			}
 
 		}

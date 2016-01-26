@@ -61,7 +61,7 @@ namespace Renderer8
 
 		#region Functions
 
-		public	void	draw(Rasterizer rasterizer, VertexProcessor vProcesor)
+			public	void	draw(Rasterizer rasterizer, VertexProcessor vProcesor)
 			{
 
 			}
