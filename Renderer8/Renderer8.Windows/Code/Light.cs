@@ -16,25 +16,25 @@ namespace Renderer8
 
 		#region Constructors
 
-		public  Light() {}
+			public  Light() {}
 
-		public	Light(float3 position, float3 ambient, float3 diffuse, float3 specular, float shininess) 
-		{
-			this.Position = position;
-			this.Ambient = ambient;
-			this.Diffuse = diffuse;
-			this.Specular = specular;
-			this.Shininess = shininess;
-		}
+			public	Light(float3 position, float3 ambient, float3 diffuse, float3 specular, float shininess) 
+			{
+				this.Position = position;
+				this.Ambient = ambient;
+				this.Diffuse = diffuse;
+				this.Specular = specular;
+				this.Shininess = shininess;
+			}
 
 		#endregion
 
 		#region Functions
 
-		public	virtual	float3	Calculate(Fragment fragment, VertexProcessor vertexProcessor)
-		{
-			return new float3();
-		}
+			public	virtual	float3	Calculate(Fragment fragment, VertexProcessor vertexProcessor)
+			{
+				return new float3();
+			}
 
 		#endregion
 	}

@@ -44,6 +44,18 @@ namespace Renderer8
 				return min + (max - min) * Clamp(gradient);
 			}
 
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static float3 Interpolate ( float3 min, float3 max, float gradient )
+			{
+				return min + (max - min) * Clamp(gradient);
+			}
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static byte4 Interpolate ( byte4 min, byte4 max, float gradient )
+			{
+				return min + (max - min) * Clamp(gradient);
+			}
+
 		#endregion
 	}
 

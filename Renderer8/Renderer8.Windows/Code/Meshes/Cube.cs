@@ -42,15 +42,18 @@ namespace Renderer8
 
 		public	Cube(float size)
 		{
+			vSize = 8;
+			tSize = 12;
+
 			vertices =	new Vertex[8];
-			vertices[0] = new Vertex(new float3(	-size,	size,	size	));
-			vertices[1] = new Vertex(new float3(	size,	size,	size	));
-			vertices[2] = new Vertex(new float3(	-size,	-size,	size	));
-			vertices[3] = new Vertex(new float3(	size,	-size,	size	));
-			vertices[4] = new Vertex(new float3(	-size,	size,	-size	));
-			vertices[5] = new Vertex(new float3(	size,	size,	-size	));
-			vertices[6] = new Vertex(new float3(	-size,	-size,	-size	));
-			vertices[7] = new Vertex(new float3(	size,	-size,	-size	));
+			vertices[0] = new Vertex(new float3(	size ,	size,	-size	), new float3(	size ,	size,	-size	).NormalizeProduct());
+			vertices[1] = new Vertex(new float3(	size ,	size,	size 	), new float3(	size ,	size,	size 	).NormalizeProduct());
+			vertices[2] = new Vertex(new float3(	size ,	-size,	-size	), new float3(	size ,	-size,	-size	).NormalizeProduct());
+			vertices[3] = new Vertex(new float3(	size ,	-size,	size 	), new float3(	size ,	-size,	size 	).NormalizeProduct());
+			vertices[4] = new Vertex(new float3(	-size,	size,	-size	), new float3(	-size,	size,	-size	).NormalizeProduct());
+			vertices[5] = new Vertex(new float3(	-size,	size,	size 	), new float3(	-size,	size,	size 	).NormalizeProduct());
+			vertices[6] = new Vertex(new float3(	-size,	-size,	-size	), new float3(	-size,	-size,	-size	).NormalizeProduct());
+			vertices[7] = new Vertex(new float3(	-size,	-size,	size 	), new float3(	-size,	-size,	size 	).NormalizeProduct());
 
 			indices = new int3[12];
 			indices[0]	= new int3(2, 3, 0);
@@ -67,7 +70,7 @@ namespace Renderer8
 			indices[11] = new int3(6, 4, 7);
 		}
 
-		public	Cube(float3 position, float4 rotation, float size = 1) : this(1)
+		public	Cube(float3 position, float4 rotation, float size = 1) : this(size)
 		{
 			this.position = position;
 			this.rotation = rotation;

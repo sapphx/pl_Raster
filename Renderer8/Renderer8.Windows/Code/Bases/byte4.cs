@@ -65,5 +65,19 @@ namespace Renderer8
 			return new byte4(a.r * b, a.g * b, a.b * b, a.a * b);
 		}
 
+		public static byte4 operator * ( byte4 a, float b )
+		{
+			return new byte4((byte) (a.r * b), (byte) (a.g * b), (byte) (a.b * b), (byte) (a.a * b));
+		}
+
+		public static byte4 operator - ( byte4 a, byte4 b )
+		{
+			return new byte4(a.r - b.r, a.g - b.g, a.b - b.b, a.a - b.a);
+		}
+
+		public static byte4 operator + ( byte4 a, byte4 b )
+		{
+			return new byte4(a.r + b.r, a.g + b.g, a.b + b.b, a.a + b.a);
+		}
 	}
 }

@@ -14,12 +14,13 @@ namespace Renderer8
 
 		public	Cone()
 		{
-			slices = 6;
+			slices = 24;
 			width = 1;
 			height = 1;
 
 			this.position = new float3(0,0,0);
-			this.rotation = new float4(0,.5f,-0.5f,0);
+			this.rotation = new float4(0, 1, 0, 0);
+			//this.rotation = new float4(0,.5f,-0.5f,0);
 
 			vSize = slices+2;
 			tSize = 2*slices;
@@ -35,13 +36,13 @@ namespace Renderer8
 			o2w = vp.obj2world;
 			float3 rotationPosition = new float3(width, 0, 0);
 
-			vertices[0] = new Vertex(new float3(0, 0, 0));
+			vertices[0] = new Vertex(new float3(0, 0, 0), new float3(0, 1, 0));
 			for (int i = 1; i < vSize - 1; i++)
 			{
-				vertices[i] = new Vertex(rotationPosition);
+				vertices[i] = new Vertex(rotationPosition, rotationPosition);
 				rotationPosition = VertexProcessor.TransformCoordinates(rotationPosition, o2w); ///rotationPosition * o2w;
 			}
-			vertices[vSize - 1] = new Vertex(new float3(0, height, 0));
+			vertices[vSize - 1] = new Vertex(new float3(0, height, 0), new float3(0, -1, 0));
 
 			indices[0] = new int3(0, slices, 1);
 			indices[tSize - 1] = new int3(vSize - 1, slices, 1);
@@ -59,10 +60,10 @@ namespace Renderer8
 
 		}
 
-		//public  Cone ( float3 position, float4 rotation)
-		//{
-		//	this.position = position;
-		//	this.rotation = rotation;
-		//}
+		public  Cone ( float3 position, float4 rotation) : this()
+		{
+			this.position = position;
+			this.rotation = rotation;
+		}
 	}
 }

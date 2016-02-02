@@ -21,6 +21,9 @@ namespace Renderer8
 
 		private VertexProcessor vp;
 
+		Light	light1;
+		byte4[] Colours;
+
 		#region Constructors
 
 		public	Device(WriteableBitmap bmp)
@@ -31,6 +34,7 @@ namespace Renderer8
 			backBuffer = new byte[pixelWidth * pixelHeight * 4];
 			depthBuffer = new float[pixelWidth * pixelHeight];
 			vp = new VertexProcessor();
+			Colours = new byte4[] { new byte4(255, 0, 0, 0), new byte4(0, 255, 0, 0), new byte4(0, 0, 255, 0), new byte4(255, 255, 0, 0), new byte4(0, 255, 255, 0), new byte4(255, 255, 255, 0), new byte4(127, 127, 127, 0) };
 		}
 
 		#endregion
@@ -153,47 +157,97 @@ namespace Renderer8
 		//		}
 		//	}
 
-		void ProcessScanLine ( int y, float3 pa, float3 pb, float3 pc, float3 pd, byte4 color )
+		void ProcessScanLine ( int y, Vertex pa, Vertex pb, Vertex pc, Vertex pd, byte4 color, float nDotL )
 		{
-			var gradient1 = pa.Y != pb.Y ? (y - pa.Y) / (pb.Y - pa.Y) : 1;
-			var gradient2 = pc.Y != pd.Y ? (y - pc.Y) / (pd.Y - pc.Y) : 1;
+			float gradient1 = pa.Position.Y != pb.Position.Y ? (y - pa.Position.Y) / (pb.Position.Y - pa.Position.Y) : 1;
+			float gradient2 = pc.Position.Y != pd.Position.Y ? (y - pc.Position.Y) / (pd.Position.Y - pc.Position.Y) : 1;
 
-			int sx = (int) MathMisc.Interpolate(pa.X, pb.X, gradient1);
-			int ex = (int) MathMisc.Interpolate(pc.X, pd.X, gradient2);
+			int sx = (int) MathMisc.Interpolate(pa.Position.X, pb.Position.X, gradient1);
+			int ex = (int) MathMisc.Interpolate(pc.Position.X, pd.Position.X, gradient2);
 
-			float z1 = MathMisc.Interpolate(pa.Z, pb.Z, gradient1);
-			float z2 = MathMisc.Interpolate(pc.Z, pd.Z, gradient2);
+			float z1 = MathMisc.Interpolate(pa.Position.Z, pb.Position.Z, gradient1);
+			float z2 = MathMisc.Interpolate(pc.Position.Z, pd.Position.Z, gradient2);
+
+			byte4 n1 = MathMisc.Interpolate(pa.Color, pb.Color, gradient1);
+			byte4 n2 = MathMisc.Interpolate(pc.Color, pd.Color, gradient2);
+
+			//float normalGradient = 1 / (float)ex;
+
+			float valueForInterpolation = 0;
+			byte4 colorTemp = new byte4();
+			//colorTemp = color * nDotL;
 
 			// drawing a line from left (sx) to right (ex) 
 			for (int x = sx; x < ex; x++)
 			{
 				//DrawPoint(new int2(x, y), MathMisc.Interpolate(z1, z2, (x - sx) / (float)(ex - sx)), color);
-				DrawPoint(x, y, MathMisc.Interpolate(z1, z2, (x - sx) / (float)(ex - sx)), color);
+				valueForInterpolation = (x - sx) / (float)(ex - sx);
+				///////colorTemp = (MathMisc.Interpolate(n1, n2, valueForInterpolation).NormalizeProduct() * 255).ToByte4();
+				colorTemp = MathMisc.Interpolate(n1, n2, valueForInterpolation);
+				//colorTemp = color * Math.Max(0, MathMisc.Interpolate(n1, n2, valueForInterpolation).NormalizeProduct().Dot((light1.Position).NormalizeProduct()));
+				DrawPoint(x, y, MathMisc.Interpolate(z1, z2, valueForInterpolation), colorTemp );
+				//color * Math.Max(0, MathMisc.Interpolate(n1, n2, valueForInterpolation).NormalizeProduct().Dot((light1.Position).NormalizeProduct())));
 			}
 		}
 
-		public void DrawTriangle ( float3 p1, float3 p2, float3 p3, byte4 color )
+		public void DrawTriangle ( Vertex vv1, Vertex vv2, Vertex vv3, byte4 color )
 		{
+			float3 p1 = vv1.Position;
+			float3 p2 = vv2.Position;
+			float3 p3 = vv3.Position;
+
+			Vertex v1 = vv1;
+			Vertex v2 = vv2;
+			Vertex v3 = vv3;
+
 			if (p1.Y > p2.Y)
 			{
-				var temp = p2;
+				float3 temp = p2;
 				p2 = p1;
 				p1 = temp;
+
+				Vertex tempVert = v2;
+				v2 = v1;
+				v1 = tempVert;
 			}
 
 			if (p2.Y > p3.Y)
 			{
-				var temp = p2;
+				float3 temp = p2;
 				p2 = p3;
 				p3 = temp;
+
+				Vertex tempVert = v2;
+				v2 = v3;
+				v3 = tempVert;
 			}
 
 			if (p1.Y > p2.Y)
 			{
-				var temp = p2;
+				float3 temp = p2;
 				p2 = p1;
 				p1 = temp;
+
+				Vertex tempVert = v2;
+				v2 = v1;
+				v1 = tempVert;
 			}
+
+			// Compute normal
+
+			float3 vnFace = (v1.Normal + v2.Normal + v3.Normal) / 3;
+			//vnFace = (v2.PreTransformValue - v1.PreTransformValue).Cross(v3.PreTransformValue - v1.PreTransformValue);
+			float3 centerPoint = (v1.PreTransformValue + v2.PreTransformValue + v3.PreTransformValue) / 3;
+
+			//color = (vnFace * 255).ToByte4();
+
+			float ndotl = Math.Max(0, vnFace.NormalizeProduct().Dot((light1.Position).NormalizeProduct()));//ComputeNDotL(centerPoint, vnFace, lightPos);
+
+			v1.Color = color * Math.Max(0, v1.Normal.NormalizeProduct().Dot((light1.Position).NormalizeProduct()));
+			v2.Color = color * Math.Max(0, v2.Normal.NormalizeProduct().Dot((light1.Position).NormalizeProduct()));
+			v3.Color = color * Math.Max(0, v3.Normal.NormalizeProduct().Dot((light1.Position).NormalizeProduct()));
+
+			// Scanline
 
 			float dP1P2, dP1P3;
 
@@ -213,11 +267,11 @@ namespace Renderer8
 				{
 					if (y < p2.Y)
 					{
-						ProcessScanLine(y, p1, p3, p1, p2, color);
+						ProcessScanLine(y, v1, v3, v1, v2, color, ndotl);
 					}
 					else
 					{
-						ProcessScanLine(y, p1, p3, p2, p3, color);
+						ProcessScanLine(y, v1, v3, v2, v3, color, ndotl);
 					}
 				}
 			}
@@ -227,19 +281,21 @@ namespace Renderer8
 				{
 					if (y < p2.Y)
 					{
-						ProcessScanLine(y, p1, p2, p1, p3, color);
+						ProcessScanLine(y, v1, v2, v1, v3, color, ndotl);
 					}
 					else
 					{
-						ProcessScanLine(y, p2, p3, p1, p3, color);
+						ProcessScanLine(y, v2, v3, v1, v3, color, ndotl);
 					}
 				}
 			}
 		}
 
-		public void Render ( Camera camera, params Mesh[] meshes )
+		public void Render ( Camera camera, Light light, params Mesh[] meshes )
 		{
-			
+
+			light1 = light;
+
 			vp.SetLookAt(camera.position, camera.target, camera.up);
 			vp.SetPerspective(90f, (float)pixelWidth / pixelHeight, 0.01f, 1.0f);
 			//vp.SetPerspective(0.78f, (float)pixelWidth / pixelHeight, 0.01f, 1.0f);
@@ -252,11 +308,18 @@ namespace Renderer8
 
 			foreach (Mesh mesh in meshes)
 			{
-				iterator = 0;
+				//iterator = 0;
 				vp.SetIdentity();
+				vp.MultByTrans(mesh.position);
 				vp.MultByRot(mesh.rotation);
 
 				float4x4 transformMatrix = vp.obj2world * vp.world2view * vp.view2proj;
+				float4x4 worldTransform = vp.obj2world;
+
+				vp.SetIdentity();
+				vp.MultByRot(mesh.rotation);
+
+				float4x4 normalTransform = vp.obj2world;
 
 				//foreach (Vertex vertex in mesh.vertices)
 				//{
@@ -283,10 +346,23 @@ namespace Renderer8
 					float3 pixelA = Project(mesh.vertices[face.A].Position, transformMatrix);
 					float3 pixelB = Project(mesh.vertices[face.B].Position, transformMatrix);
 					float3 pixelC = Project(mesh.vertices[face.C].Position, transformMatrix);
-				
-					DrawTriangle(pixelA, pixelB, pixelC, (new byte4(iterator%2, 0,0,1)) * 255);
-					iterator++;
+
+					//float3 normalA = mesh.vertices[face.A].Normal;///Project(mesh.vertices[face.A].Normal, vp.obj2world);
+					//float3 normalB = mesh.vertices[face.B].Normal;///Project(mesh.vertices[face.B].Normal, vp.obj2world);
+					//float3 normalC = mesh.vertices[face.C].Normal;///Project(mesh.vertices[face.C].Normal, vp.obj2world);
+
+					float3 normalA = VertexProcessor.TransformCoordinates(mesh.vertices[face.A].Normal, normalTransform);
+					float3 normalB = VertexProcessor.TransformCoordinates(mesh.vertices[face.B].Normal, normalTransform);
+					float3 normalC = VertexProcessor.TransformCoordinates(mesh.vertices[face.C].Normal, normalTransform);
+					
+					float3 worldPosA = Project(mesh.vertices[face.A].Position, worldTransform);
+					float3 worldPosB = Project(mesh.vertices[face.B].Position, worldTransform);
+					float3 worldPosC = Project(mesh.vertices[face.C].Position, worldTransform);
+
+					DrawTriangle(new Vertex(pixelA, normalA, worldPosA), new Vertex(pixelB, normalB, worldPosB), new Vertex(pixelC, normalC, worldPosC), Colours[iterator]);//new byte4(255, 0, 0, 255));// (new byte4(iterator%2, 0,0,1)) * 255);
+					
 				}
+				iterator++;
 			}
 		}
 

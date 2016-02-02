@@ -24,23 +24,34 @@ namespace Renderer8
     public sealed partial class MainPage : Page
     {
 		Device device;
-		Mesh mesh = new Cylinder();   //new Cone();//new Cube(new float3(), new float4(0,1,0,0));
+		Mesh[] mesh = new Mesh[] {	new Cylinder(new float3(-1.4f, 0, 0)), new Cylinder(new float3(1.4f,.4f,0), 0.5f, 0.8f), 
+									new Cone(new float3(0, 0, 0), new float4(0, 1, 0, 0)), 
+									new Cube(new float3(0, 1f, 0), new float4(0, 1, 0, 0), .2f), 
+									new Cylinder(new float3(-1.4f, -.5f, 0), 0.5f, 0.8f), new Cylinder(new float3(1.4f, -.5f, 0), 1f, 1f), 
+									new Cone(new float3(0, -.5f, 0), new float4(0, 1, 1, 0)) };   
+									//new Cone();//new Cube(new float3(), new float4(0,1,0,0));
 		Camera camera = new Camera();
+		Light light = new Light(new float3(1,0,0), new float3(1, 1, 1), new float3(1, 1, 1), new float3(1, 1, 1), 1);
 
 		public MainPage()
         {
             this.InitializeComponent();
-        }
+			mesh[3].rotation.W -= 225;
+		}
 
 		void CompositionTarget_Rendering ( object sender, object e )
 		{
-			device.Clear(new float3(0,0,0));
-			mesh.rotation.W += 2;
+			device.Clear(new float3(1,1,1) * 255);
+			mesh[0].rotation.W += 2;
+			mesh[1].rotation.W += 1;
+			mesh[2].rotation.W -= 10;
+			//mesh[3].rotation.W -= 1;
+
 			// rotating slightly the cube during each frame rendered
 			//mesh.Rotation = new Vector3(mesh.Rotation.X + 0.01f, mesh.Rotation.Y + 0.01f, mesh.Rotation.Z);
 
 			// Doing the various matrix operations
-			device.Render(camera, mesh);
+			device.Render(camera, light, mesh);
 			// Flushing the back buffer into the front buffer
 			device.Present();
 		}

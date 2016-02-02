@@ -120,7 +120,7 @@ namespace Renderer8
 			c.X =			(vector.X * transformation[0][0]) + (vector.Y * transformation[1][0]) + (vector.Z * transformation[2][0])	+ transformation[3][0];
 			c.Y =			(vector.X * transformation[0][1]) + (vector.Y * transformation[1][1]) + (vector.Z * transformation[2][1])	+ transformation[3][1];
 			c.Z =			(vector.X * transformation[0][2]) + (vector.Y * transformation[1][2]) + (vector.Z * transformation[2][2])	+ transformation[3][2];
-			c.W = 1.0f /	((vector.X * transformation[0][3]) + (vector.Y * transformation[1][3]) + (vector.Z * transformation[2][3])	+ transformation[3][3]);
+			c.W = 1.0f /  (	(vector.X * transformation[0][3]) + (vector.Y * transformation[1][3]) + (vector.Z * transformation[2][3])	+ transformation[3][3]);
 
             return new float3( c.X * c.W, c.Y * c.W, c.Z * c.W);
         }
