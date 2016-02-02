@@ -14,7 +14,7 @@ namespace Renderer8
 
 		public	Cone()
 		{
-			slices = 12;
+			slices = 24;
 			width = 1;
 			height = 1;
 

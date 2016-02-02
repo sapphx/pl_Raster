@@ -13,17 +13,17 @@ namespace Renderer8
 		float	width;
 		float	height;
 
-		public	Cylinder () : this(12, 1, 1, 1, new float3(0, 0, 0), new float4(0, 1, 0, 0))
+		public	Cylinder () : this(24, 1, 1, 1, new float3(0, 0, 0), new float4(0, 1, 0, 0))
 		{
 
 		}
 
-		public Cylinder (float3 position) : this(12, 1, 1, 1, position, new float4(0, 1, 0, 0))
+		public Cylinder (float3 position) : this(24, 1, 1, 1, position, new float4(0, 1, 0, 0))
 		{
 
 		}
 
-		public Cylinder ( float3 position, float width, float height ) : this(12, 1, width, height, position, new float4(0, 1, 0, 0))
+		public Cylinder ( float3 position, float width, float height ) : this(24, 1, width, height, position, new float4(0, 1, 0, 0))
 		{
 
 		}

@@ -16,8 +16,8 @@ namespace Renderer8
 		private readonly float[] depthBuffer;
 		private WriteableBitmap bmp;
 
-		int pixelWidth;
-		int pixelHeight;
+		//int pixelWidth; 
+		//int pixelHeight;
 
 		private VertexProcessor vp;
 
@@ -29,10 +29,10 @@ namespace Renderer8
 		public	Device(WriteableBitmap bmp)
 		{
 			this.bmp = bmp;
-			pixelWidth = bmp.PixelWidth;
-			pixelHeight = bmp.PixelHeight;
-			backBuffer = new byte[pixelWidth * pixelHeight * 4];
-			depthBuffer = new float[pixelWidth * pixelHeight];
+		//	pixelWidth = bmp.PixelWidth;
+		//	pixelHeight = bmp.PixelHeight;
+			backBuffer = new byte[bmp.PixelWidth * bmp.PixelHeight * 4];
+			depthBuffer = new float[bmp.PixelWidth * bmp.PixelHeight];
 			vp = new VertexProcessor();
 			Colours = new byte4[] { new byte4(255, 0, 0, 0), new byte4(0, 255, 0, 0), new byte4(0, 0, 255, 0), new byte4(255, 255, 0, 0), new byte4(0, 255, 255, 0), new byte4(255, 255, 255, 0), new byte4(127, 127, 127, 0) };
 		}
@@ -71,7 +71,7 @@ namespace Renderer8
 
 		public void PutPixel(int x, int y, float z, byte4 color)
 		{
-			var index = (x + y * pixelWidth);
+			var index = (x + y * bmp.PixelWidth);
 
 			//backBuffer[index]		= (byte)(color.b * 255);
 			//backBuffer[index + 1]	= (byte)(color.g * 255);
@@ -98,13 +98,13 @@ namespace Renderer8
 			
 			float3 point = VertexProcessor.TransformCoordinates(coord, transMat);
 
-			return new float3(point.X * pixelWidth + pixelWidth * 0.5f, -point.Y * pixelHeight + pixelHeight * 0.5f, point.Z);
+			return new float3(point.X * bmp.PixelWidth + bmp.PixelWidth * 0.5f, -point.Y * bmp.PixelHeight + bmp.PixelHeight * 0.5f, point.Z);
 		}
 
 		public void DrawPoint ( float3 point, float4 color )
 		{
 			// Clipping what's visible on screen
-			if (point.X >= 0 && point.Y >= 0 && point.X < pixelWidth && point.Y < pixelHeight)
+			if (point.X >= 0 && point.Y >= 0 && point.X < bmp.PixelWidth && point.Y < bmp.PixelHeight)
 			{
 
 				PutPixel((int)point.X, (int)point.Y, point.Z, (color * 255).ToByte4());//new float4(1.0f, 1.0f, 0.0f, 1.0f).ToByte4());
@@ -114,10 +114,10 @@ namespace Renderer8
 		public void DrawPoint ( int2 point, float z, byte4 color )
 		{
 			// Clipping what's visible on screen
-			if (point.X >= 0 && point.Y >= 0 && point.X < pixelWidth && point.Y < pixelHeight)
+			if (point.X >= 0 && point.Y >= 0 && point.X < bmp.PixelWidth && point.Y < bmp.PixelHeight)
 			{
 
-				PutPixel(point.X, point.Y, z, (color * 255));//.ToByte4());//new float4(1.0f, 1.0f, 0.0f, 1.0f).ToByte4());
+				PutPixel(point.X, point.Y, z, color);//.ToByte4());//new float4(1.0f, 1.0f, 0.0f, 1.0f).ToByte4());
 																	   //new byte4((byte) (z * 120), 0, 0, 1));//
 			}
 		}
@@ -125,7 +125,7 @@ namespace Renderer8
 		public void DrawPoint ( int pX, int pY, float z, byte4 color )
 		{
 			// Clipping what's visible on screen
-			if (pX >= 0 && pY >= 0 && pX < pixelWidth && pY < pixelHeight)
+			if (pX >= 0 && pY >= 0 && pX < bmp.PixelWidth && pY < bmp.PixelHeight)
 			{
 
 				PutPixel(pX, pY, z, color);//.ToByte4());//new float4(1.0f, 1.0f, 0.0f, 1.0f).ToByte4());
@@ -133,29 +133,6 @@ namespace Renderer8
 			}
 		}
 
-		//	public void DrawBline ( float2 point0, float2 point1, float4 color )
-		//	{
-		//		int x0 = (int)point0.X;
-		//		int y0 = (int)point0.Y;
-		//		int x1 = (int)point1.X;
-		//		int y1 = (int)point1.Y;
-		//
-		//		var dx = Math.Abs(x1 - x0);
-		//		var dy = Math.Abs(y1 - y0);
-		//		var sx = (x0 < x1) ? 1 : -1;
-		//		var sy = (y0 < y1) ? 1 : -1;
-		//		var err = dx - dy;
-		//
-		//		while (true)
-		//		{
-		//			DrawPoint(new float2(x0, y0), color);
-		//
-		//			if ((x0 == x1) && (y0 == y1)) break;
-		//			var e2 = 2 * err;
-		//			if (e2 > -dy) { err -= dy; x0 += sx; }
-		//			if (e2 < dx) { err += dx; y0 += sy; }
-		//		}
-		//	}
 
 		void ProcessScanLine ( int y, Vertex pa, Vertex pb, Vertex pc, Vertex pd, byte4 color, float nDotL )
 		{
@@ -177,19 +154,15 @@ namespace Renderer8
 			byte4 colorTemp = new byte4();
 			//colorTemp = color * nDotL;
 
-			float ex_sx = 1 / (float)(ex - sx);
-			float zForInterpolation = z2 - z1;
-			byte4 nForInterpolation = n2 - n1;
-
 			// drawing a line from left (sx) to right (ex) 
 			for (int x = sx; x < ex; x++)
 			{
 				//DrawPoint(new int2(x, y), MathMisc.Interpolate(z1, z2, (x - sx) / (float)(ex - sx)), color);
-				valueForInterpolation = (x - sx) * ex_sx;
+				valueForInterpolation = (x - sx) / (float)(ex - sx);
 				///////colorTemp = (MathMisc.Interpolate(n1, n2, valueForInterpolation).NormalizeProduct() * 255).ToByte4();
-				colorTemp = n1 + nForInterpolation * valueForInterpolation;//MathMisc.Interpolate(n1, n2, valueForInterpolation);
+				colorTemp = MathMisc.Interpolate(n1, n2, valueForInterpolation);
 				//colorTemp = color * Math.Max(0, MathMisc.Interpolate(n1, n2, valueForInterpolation).NormalizeProduct().Dot((light1.Position).NormalizeProduct()));
-				DrawPoint(x, y, z1 + zForInterpolation * valueForInterpolation, colorTemp );//DrawPoint(x, y, MathMisc.Interpolate(z1, z2, valueForInterpolation), colorTemp );
+				DrawPoint(new int2(x, y), MathMisc.Interpolate(z1, z2, valueForInterpolation), colorTemp );
 				//color * Math.Max(0, MathMisc.Interpolate(n1, n2, valueForInterpolation).NormalizeProduct().Dot((light1.Position).NormalizeProduct())));
 			}
 		}
@@ -301,12 +274,7 @@ namespace Renderer8
 			light1 = light;
 
 			vp.SetLookAt(camera.position, camera.target, camera.up);
-			vp.SetPerspective(90f, (float)pixelWidth / pixelHeight, 0.01f, 1.0f);
-			//vp.SetPerspective(0.78f, (float)pixelWidth / pixelHeight, 0.01f, 1.0f);
-			//var viewMatrix = Matrix.LookAtLH(camera.Position, camera.Target, Vector3.UnitY);
-			//var projectionMatrix = Matrix.PerspectiveFovRH(0.78f,
-			//											   (float)pixelWidth / pixelHeight,
-			//											   0.01f, 1.0f);
+			vp.SetPerspective(90f, (float)bmp.PixelWidth / bmp.PixelHeight, 0.01f, 1.0f);
 
 			int iterator = 0;
 
@@ -325,35 +293,11 @@ namespace Renderer8
 
 				float4x4 normalTransform = vp.obj2world;
 
-				//foreach (Vertex vertex in mesh.vertices)
-				//{
-				//	// First, we project the 3D coordinates into the 2D space
-				//	float3 point = Project(vertex.Position, transformMatrix);
-				//	// Then we can draw on screen
-				//	DrawPoint(point, new float4(1.0f, 1.0f, 0.0f, 1.0f));
-				//}
-
-				//foreach (int3 face in mesh.indices)
-				//{
-				//	float3 pixelA = Project(mesh.vertices[face.A].Position, transformMatrix);
-				//	float3 pixelB = Project(mesh.vertices[face.B].Position, transformMatrix);
-				//	float3 pixelC = Project(mesh.vertices[face.C].Position, transformMatrix);
-				//
-				//	DrawBline(pixelA, pixelB);
-				//	DrawBline(pixelB, pixelC);
-				//	DrawBline(pixelC, pixelA);
-				//}
-
-
 				foreach (int3 face in mesh.indices)
 				{
 					float3 pixelA = Project(mesh.vertices[face.A].Position, transformMatrix);
 					float3 pixelB = Project(mesh.vertices[face.B].Position, transformMatrix);
 					float3 pixelC = Project(mesh.vertices[face.C].Position, transformMatrix);
-
-					//float3 normalA = mesh.vertices[face.A].Normal;///Project(mesh.vertices[face.A].Normal, vp.obj2world);
-					//float3 normalB = mesh.vertices[face.B].Normal;///Project(mesh.vertices[face.B].Normal, vp.obj2world);
-					//float3 normalC = mesh.vertices[face.C].Normal;///Project(mesh.vertices[face.C].Normal, vp.obj2world);
 
 					float3 normalA = VertexProcessor.TransformCoordinates(mesh.vertices[face.A].Normal, normalTransform);
 					float3 normalB = VertexProcessor.TransformCoordinates(mesh.vertices[face.B].Normal, normalTransform);
