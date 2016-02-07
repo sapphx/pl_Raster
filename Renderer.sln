@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Renderer", "Renderer\Renderer.csproj", "{52C8941F-B802-41D7-ADAB-D5E9E8482AB3}"
 EndProject
@@ -25,6 +25,7 @@ Global
 		Renderer8\Renderer8.Shared\Renderer8.Shared.projitems*{c48d30c6-64d7-4443-8312-7bb196c8c6d2}*SharedItemsImports = 4
 		Renderer8Unoptimized\Renderer8.Shared\Renderer8.Shared.projitems*{0ac587db-f0e7-4bed-8940-f7a77e54b5df}*SharedItemsImports = 4
 		Renderer8\Renderer8.Shared\Renderer8.Shared.projitems*{69ffd7e2-38c5-4c63-98b3-7a0f54064608}*SharedItemsImports = 4
+		Renderer8Unoptimized\Renderer8.Shared\Renderer8.Shared.projitems*{5d5c9507-a40b-47ce-b25a-81e4edc1b4e0}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

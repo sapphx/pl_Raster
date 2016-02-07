@@ -19,11 +19,11 @@ namespace Renderer8
     public sealed partial class MainPage : Page
     {
 		Device device;
-		Mesh[] mesh = new Mesh[] {	new Cylinder(new float3(-1.4f, 0, 0)), new Cylinder(new float3(1.4f,.4f,0), 0.5f, 0.8f), 
-									new Cone(new float3(0, 0, 0), new float4(0, 1, 0, 0)), 
-									new Cube(new float3(0, 1f, 0), new float4(0, 1, 0, 0), .2f), 
-									new Cylinder(new float3(-1.4f, -.5f, 0), 0.5f, 0.8f), new Cylinder(new float3(1.4f, -.5f, 0), 1f, 1f), 
-									new Cone(new float3(0, -.5f, 0), new float4(0, 1, 1, 0)) };   
+		Mesh[] mesh = new Mesh[] {	new Cylinder(new float3(-1.4f, 0, -2)), new Cylinder(new float3(1.4f,.4f, -2), 0.5f, 0.8f), 
+									new Cone(new float3(0, 0, 0), new float4(1, 0, 0, 180)), 
+									new Cube(new float3(0, 1f, -2), new float4(0, 1, 0, 0), .2f), 
+									new Cylinder(new float3(-1.4f, -.5f, -2), 0.5f, 0.8f), new Cylinder(new float3(1.4f, -.5f, -2), 1f, 1f), 
+									new Cone(new float3(0, -.5f, -2), new float4(0, 1, 1, 0)) };   
 									//new Cone();//new Cube(new float3(), new float4(0,1,0,0));
 		Camera camera = new Camera();
 		Light light = new Light(new float3(1,0,0), new float3(1, 1, 1), new float3(1, 1, 1), new float3(1, 1, 1), 1);
@@ -32,20 +32,26 @@ namespace Renderer8
         {
             this.InitializeComponent();
 			mesh[3].rotation.W -= 225;
+			
 		}
 
 		void CompositionTarget_Rendering ( object sender, object e )
 		{
+			int before = DateTime.Now.Millisecond;
+		
 			device.Clear(new float3(1,1,1) * 255);
 			mesh[0].rotation.W += 2;
 			mesh[1].rotation.W += 1;
-			mesh[2].rotation.W -= 10;
+			//mesh[2].rotation.W -= 10;
 			//mesh[3].rotation.W -= 1;
 
 
 			device.Render(camera, light, mesh);
 
 			device.Present();
+
+			before = DateTime.Now.Millisecond - before;
+			textBlock.Text = (1000.0f / before).ToString();
 		}
 
 		private void Grid_Loaded ( object sender, RoutedEventArgs e )

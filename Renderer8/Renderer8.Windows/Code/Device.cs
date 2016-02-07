@@ -255,12 +255,12 @@ namespace Renderer8
 
 			float dP1P2, dP1P3;
 
-			if (p2.Y - p1.Y > 0)
+			if (p2.Y - p1.Y >= 0)
 				dP1P2 = (p2.X - p1.X) / (p2.Y - p1.Y);
 			else
 				dP1P2 = 0;
 
-			if (p3.Y - p1.Y > 0)
+			if (p3.Y - p1.Y >= 0)
 				dP1P3 = (p3.X - p1.X) / (p3.Y - p1.Y);
 			else
 				dP1P3 = 0;

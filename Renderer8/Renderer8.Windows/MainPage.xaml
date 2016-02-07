@@ -9,6 +9,7 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="0,0,0,0">
         <Image x:Name="frontBuffer"/>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="46,43,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="86" Height="75" Foreground="Red"/>
 
     </Grid>
 </Page>
