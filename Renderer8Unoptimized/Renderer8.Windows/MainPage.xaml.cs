@@ -36,6 +36,9 @@ namespace Renderer8
 
 		void CompositionTarget_Rendering ( object sender, object e )
 		{
+
+			int before = DateTime.Now.Second * 1000 + DateTime.Now.Millisecond;
+
 			device.Clear(new float3(1,1,1) * 255);
 			mesh[0].rotation.W += 2;
 			mesh[1].rotation.W += 1;
@@ -46,6 +49,9 @@ namespace Renderer8
 			device.Render(camera, light, mesh);
 
 			device.Present();
+
+			before = DateTime.Now.Second * 1000 + DateTime.Now.Millisecond - before;
+			textBox.Text = (1000.0f / before).ToString() + " ## " + before.ToString() ;
 		}
 
 		private void Grid_Loaded ( object sender, RoutedEventArgs e )
